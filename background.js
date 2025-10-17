@@ -1,9 +1,50 @@
+// Load ExtPay library
+importScripts('vendor/ExtPay.js');
+
+// TODO: Replace 'your-extension-id' with your actual ExtensionPay extension ID
+// Sign up at https://extensionpay.com and create your extension to get this ID
+const extpay = ExtPay('gmail-trimless');
+extpay.startBackground();
+
+// Listen for payment events
+extpay.onPaid.addListener(async (user) => {
+    console.log('User paid!', user);
+    await chrome.storage.local.set({ 'trimless-paid': true });
+    // Notify all Gmail tabs to update their state
+    const tabs = await chrome.tabs.query({ url: 'https://mail.google.com/mail/*' });
+    tabs.forEach(tab => {
+        chrome.tabs.sendMessage(tab.id, { type: 'payment-updated' }).catch(() => {});
+    });
+});
+
+// Listen for trial start events
+extpay.onTrialStarted.addListener(async (user) => {
+    console.log('Trial started!', user);
+    await chrome.storage.local.set({ 'trimless-trial-started': user.trialStartedAt.toISOString() });
+    // Notify all Gmail tabs to update their state
+    const tabs = await chrome.tabs.query({ url: 'https://mail.google.com/mail/*' });
+    tabs.forEach(tab => {
+        chrome.tabs.sendMessage(tab.id, { type: 'trial-started' }).catch(() => {});
+    });
+});
+
 chrome.runtime.onInstalled.addListener(async details => {
     if (details.reason !== 'install') return;
 
     const local = await chrome.storage.local.get(null);
     if (!local.hasOwnProperty('trimless-enabled')) {
         await chrome.storage.local.set({ 'trimless-enabled': true });
+    }
+
+    // Initialize payment state
+    if (!local.hasOwnProperty('trimless-paid')) {
+        await chrome.storage.local.set({ 'trimless-paid': false });
+    }
+    if (!local.hasOwnProperty('trimless-trial-started')) {
+        await chrome.storage.local.set({ 'trimless-trial-started': null });
+    }
+    if (!local.hasOwnProperty('trimless-daily-usage')) {
+        await chrome.storage.local.set({ 'trimless-daily-usage': { date: null, threads: [], count: 0 } });
     }
 
     const sync = await chrome.storage.sync.get(null);
@@ -17,6 +58,11 @@ chrome.runtime.onInstalled.addListener(async details => {
             'trimless-reply-enabled': false
         });
     }
+
+    // On first install, show trial page after a short delay
+    setTimeout(() => {
+        extpay.openTrialPage('7-day');
+    }, 1000);
 });
 
 function updateIcon(tabId, isEnabled) {
@@ -55,8 +101,57 @@ chrome.action.onClicked.addListener((tab) => {
     });
 });
 
-chrome.runtime.onMessage.addListener((isEnabled, sender) => {
-    updateIcon(sender.tab.id, isEnabled);
-    setTimeout(() => updateIcon(sender.tab.id, isEnabled), 100);
-    setTimeout(() => updateIcon(sender.tab.id, isEnabled), 200);
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    // Handle enable/disable messages from content script
+    if (typeof message === 'boolean') {
+        updateIcon(sender.tab.id, message);
+        setTimeout(() => updateIcon(sender.tab.id, message), 100);
+        setTimeout(() => updateIcon(sender.tab.id, message), 200);
+        return;
+    }
+
+    // Handle ExtPay requests
+    if (message === 'extpay-get-user') {
+        extpay.getUser().then(user => {
+            sendResponse(user);
+        }).catch(err => {
+            console.error('Error fetching user:', err);
+            sendResponse(null);
+        });
+        return true; // Indicates async response
+    }
+
+    if (message === 'extpay-open-payment') {
+        extpay.openPaymentPage();
+        return;
+    }
+
+    if (message === 'extpay-open-trial') {
+        extpay.openTrialPage('7-day');
+        return;
+    }
+
+    if (message && message.type === 'extpay-open-plan') {
+        extpay.openPaymentPage(message.plan);
+        return;
+    }
 });
+
+// Sync payment state from ExtPay on startup and periodically
+async function syncPaymentState() {
+    try {
+        const user = await extpay.getUser();
+        await chrome.storage.local.set({
+            'trimless-paid': user.paid || false,
+            'trimless-trial-started': user.trialStartedAt ? user.trialStartedAt.toISOString() : null
+        });
+    } catch (err) {
+        console.error('Error syncing payment state:', err);
+    }
+}
+
+// Sync on startup
+syncPaymentState();
+
+// Sync every 30 minutes
+setInterval(syncPaymentState, 30 * 60 * 1000);

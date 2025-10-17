@@ -23,6 +23,11 @@
       "matches": ["https://mail.google.com/mail/*"],
       "js": ["vendor/jquery-3.7.1.min.js", "contentScript.js"],
       "run_at": "document_start"
+    },
+    {
+      "matches": ["https://extensionpay.com/*"],
+      "js": ["vendor/ExtPay.js"],
+      "run_at": "document_start"
     }
   ],
   "options_ui": {
@@ -30,7 +35,10 @@
     "open_in_tab": false
   },
   "permissions": ["storage"],
-  "host_permissions": ["https://mail.google.com/mail/*"],
+  "host_permissions": [
+    "https://mail.google.com/mail/*",
+    "https://extensionpay.com/*"
+  ],
   "short_name": "Trimless for Gmail",
   "browser_specific_settings": {
     "gecko": {

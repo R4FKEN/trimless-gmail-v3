@@ -11,6 +11,89 @@
 
 <body class="chrome-bootstrap">
 
+  <!-- Premium Status Section -->
+  <div id="premium-section" style="
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+  ">
+    <h2 style="margin: 0 0 12px 0; font-size: 20px;">Premium Status</h2>
+
+    <div id="status-paid" style="display: none;">
+      <div style="font-size: 16px; font-weight: 600;">
+        ✓ Premium Active
+      </div>
+      <div style="font-size: 14px; opacity: 0.9; margin-top: 4px;">
+        Thank you for supporting Trimless! Enjoy unlimited email untrimming.
+      </div>
+    </div>
+
+    <div id="status-trial" style="display: none;">
+      <div style="font-size: 16px; font-weight: 600;">
+        Free Trial Active
+      </div>
+      <div style="font-size: 14px; opacity: 0.9; margin-top: 4px;">
+        <span id="trial-days-remaining">7</span> days remaining in your trial
+      </div>
+      <div style="margin-top: 12px;">
+        <button id="upgrade-from-trial" style="
+          background: white;
+          color: #667eea;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 6px;
+          font-weight: 600;
+          cursor: pointer;
+          font-size: 14px;
+        ">
+          Upgrade to Premium
+        </button>
+      </div>
+    </div>
+
+    <div id="status-free" style="display: none;">
+      <div style="font-size: 16px; font-weight: 600;">
+        Free Plan
+      </div>
+      <div style="font-size: 14px; opacity: 0.9; margin-top: 4px;">
+        Daily limit: <span id="daily-usage-count">0</span>/5 emails untrimmed today
+      </div>
+      <div style="margin-top: 12px; display: flex; gap: 10px;">
+        <button id="start-trial-btn" style="
+          flex: 1;
+          background: white;
+          color: #667eea;
+          border: none;
+          padding: 10px;
+          border-radius: 6px;
+          font-weight: 600;
+          cursor: pointer;
+          font-size: 14px;
+        ">
+          Start 7-Day Free Trial
+        </button>
+        <button id="upgrade-btn" style="
+          flex: 1;
+          background: rgba(255,255,255,0.2);
+          color: white;
+          border: 2px solid white;
+          padding: 10px;
+          border-radius: 6px;
+          font-weight: 600;
+          cursor: pointer;
+          font-size: 14px;
+        ">
+          Upgrade to Premium
+        </button>
+      </div>
+      <div style="margin-top: 12px; font-size: 13px; opacity: 0.85;">
+        Premium: $1.99/month or $4.99 lifetime
+      </div>
+    </div>
+  </div>
+
   <h1>Color</h1>
 
   <label style="display: block; margin-bottom: 10px">
