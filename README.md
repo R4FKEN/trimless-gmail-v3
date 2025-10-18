@@ -2,7 +2,6 @@
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue)
 ![Manifest](https://img.shields.io/badge/manifest-v3-green)
-![License](https://img.shields.io/badge/license-Proprietary-red)
 
 **Never miss clipped Gmail messages again!** Automatically expand all truncated Gmail messages instantly.
 
@@ -77,19 +76,19 @@ This extension uses Chrome's latest Manifest V3 architecture:
 ### Permissions
 
 - `storage` - Save settings and statistics
-- `host_permissions` - Access to mail.google.com
+- `host_permissions` - Access to mail.google.com and extensionpay.com
 
 ### Privacy & Security
 
 - ✅ **Zero data collection** - No tracking or analytics
 - ✅ **Local processing** - Everything runs in your browser
-- ✅ **No external servers** - No data leaves your device
+- ✅ **No external servers** - No data leaves your device, except for payment details via ExtPay/Stripe
 - ✅ **Open source ready** - Transparent architecture
-- ✅ **Secure payments** - ExtensionPay integration
+- ✅ **Secure payments** - ExtensionPay/Stripe integration
 
 ## 💰 Payment Integration
 
-This extension uses [ExtensionPay](https://extensionpay.com/) for secure payment processing.
+This extension uses [ExtensionPay](https://extensionpay.com/) and Stripe for secure payment processing.
 
 ### Trial Period
 
@@ -106,7 +105,7 @@ This extension uses [ExtensionPay](https://extensionpay.com/) for secure payment
 
 ## 🤝 Contributing
 
-This is a proprietary extension, but bug reports and feature suggestions are welcome!
+Bug reports and feature suggestions are welcome!
 
 1. Send an email describing the bug or feature
 2. Include Gmail version and Chrome version
@@ -114,10 +113,9 @@ This is a proprietary extension, but bug reports and feature suggestions are wel
 
 ## 📄 License
 
-Proprietary License with ExtensionPay integration.
+MIT License with ExtensionPay integration.
 
 - Personal and commercial use allowed after purchase
-- No redistribution without permission
 - Source code available for transparency
 
 ## 🆘 Support
