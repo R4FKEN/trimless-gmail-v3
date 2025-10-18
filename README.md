@@ -29,7 +29,7 @@
 
 ### From Chrome Web Store (Recommended)
 
-1. Visit the Chrome Web Store (link coming soon)
+1. Visit the [Chrome Web Store](https://chromewebstore.google.com/detail/trimless-for-gmail-v3/oibhbmliggcbpecnkjbdolkokcpmobbo)
 2. Click "Add to Chrome"
 3. Enjoy automatic message expansion!
 
@@ -121,7 +121,7 @@ MIT License with ExtensionPay integration.
 ## 🆘 Support
 
 - **Email**: support@trimlessforgmail.com
-- **Documentation**: See this README
+- **Documentation**: See [the website here](https://trimlessforgmail.com/)!
 
 ## 🙏 Acknowledgments
 
