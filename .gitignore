@@ -1,2 +1,4 @@
 dist.zip
-.github/copilot-instructions.md
+.DS_Store
+config.js
+hub/copilot-instructions.md

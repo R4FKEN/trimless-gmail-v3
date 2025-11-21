@@ -1,9 +1,12 @@
+// Load configuration
+importScripts('config.js');
+
 // Load ExtPay library
 importScripts('vendor/ExtPay.js');
 
 // TODO: Replace 'your-extension-id' with your actual ExtensionPay extension ID
 // Sign up at https://extensionpay.com and create your extension to get this ID
-const extpay = ExtPay('gmail-trimless');
+const extpay = ExtPay(CONFIG.EXTPAY_ID);
 extpay.startBackground();
 
 // Listen for payment events
@@ -13,7 +16,7 @@ extpay.onPaid.addListener(async (user) => {
     // Notify all Gmail tabs to update their state
     const tabs = await chrome.tabs.query({ url: 'https://mail.google.com/mail/*' });
     tabs.forEach(tab => {
-        chrome.tabs.sendMessage(tab.id, { type: 'payment-updated' }).catch(() => {});
+        chrome.tabs.sendMessage(tab.id, { type: 'payment-updated' }).catch(() => { });
     });
 });
 
@@ -24,7 +27,7 @@ extpay.onTrialStarted.addListener(async (user) => {
     // Notify all Gmail tabs to update their state
     const tabs = await chrome.tabs.query({ url: 'https://mail.google.com/mail/*' });
     tabs.forEach(tab => {
-        chrome.tabs.sendMessage(tab.id, { type: 'trial-started' }).catch(() => {});
+        chrome.tabs.sendMessage(tab.id, { type: 'trial-started' }).catch(() => { });
     });
 });
 

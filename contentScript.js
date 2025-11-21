@@ -52,7 +52,7 @@ function isDailyLimitReached() {
     // Reset counter if it's a new day
     if (dailyUsage.date !== today) {
         dailyUsage = { date: today, threads: [], count: 0 };
-        chrome.storage.local.set({ 'trimless-daily-usage': dailyUsage }).catch(() => {});
+        chrome.storage.local.set({ 'trimless-daily-usage': dailyUsage }).catch(() => { });
         return false;
     }
 
@@ -98,100 +98,151 @@ async function trackEmailUntrim() {
     return true;
 }
 
-// Show upgrade prompt when limit is reached
-function showUpgradePrompt() {
-    // Remove existing prompt if any
-    $('#trimless-upgrade-prompt').remove();
+// Shadow DOM Helper
+function createShadowPrompt(id, title, message, showMonthly = true) {
+    const hostId = `trimless-shadow-${id}`;
+    if (document.getElementById(hostId)) return;
 
-    const prompt = $(`
-        <div id="trimless-upgrade-prompt" style="
+    const host = document.createElement('div');
+    host.id = hostId;
+    host.style.cssText = 'position: fixed; z-index: 2147483647; top: 0; left: 0;';
+    document.body.appendChild(host);
+
+    const shadow = host.attachShadow({ mode: 'open' });
+
+    const style = document.createElement('style');
+    style.textContent = `
+        :host { all: initial; }
+        .modal {
             position: fixed;
             top: 20px;
             right: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px;
+            padding: 24px;
             border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            z-index: 10000;
-            max-width: 350px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        ">
-            <div style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">
-                Daily Limit Reached
-            </div>
-            <div style="font-size: 14px; margin-bottom: 15px; opacity: 0.95;">
-                You've untrimmed 5 emails today. Upgrade to Premium for unlimited access!
-            </div>
-            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                <button id="trimless-upgrade-monthly" style="
-                    flex: 1;
-                    background: white;
-                    color: #667eea;
-                    border: none;
-                    padding: 10px;
-                    border-radius: 6px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    font-size: 13px;
-                ">
-                    $1.99/month
-                </button>
-                <button id="trimless-upgrade-lifetime" style="
-                    flex: 1;
-                    background: rgba(255,255,255,0.2);
-                    color: white;
-                    border: 2px solid white;
-                    padding: 10px;
-                    border-radius: 6px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    font-size: 13px;
-                ">
-                    $4.99 Lifetime
-                </button>
-            </div>
-            <button id="trimless-close-prompt" style="
-                width: 100%;
-                background: transparent;
-                color: white;
-                border: 1px solid rgba(255,255,255,0.5);
-                padding: 8px;
-                border-radius: 6px;
-                cursor: pointer;
-                font-size: 12px;
-                opacity: 0.8;
-            ">
-                Maybe Later
+            width: 320px;
+            box-sizing: border-box;
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        .text { font-size: 14px; line-height: 1.5; opacity: 0.95; margin-bottom: 20px; }
+        .actions { display: flex; gap: 10px; margin-bottom: 12px; }
+        .btn {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+            transition: transform 0.1s;
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn-primary { background: white; color: #667eea; }
+        .btn-outline { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); }
+        .close {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            width: 100%;
+            padding: 8px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .close:hover { color: white; }
+    `;
+    shadow.appendChild(style);
+
+    const container = document.createElement('div');
+    container.className = 'modal';
+    container.innerHTML = `
+        <div class="title">${title}</div>
+        <div class="text">${message}</div>
+        <div class="actions">
+            ${showMonthly ? '<button class="btn btn-primary" id="btn-monthly">$1.99/month</button>' : ''}
+            <button class="btn ${showMonthly ? 'btn-outline' : 'btn-primary'}" id="btn-lifetime">
+                ${showMonthly ? '$4.99 Lifetime' : 'Upgrade to Premium'}
             </button>
         </div>
-    `);
+        <button class="close" id="btn-close">Maybe Later</button>
+    `;
+    shadow.appendChild(container);
 
-    $('body').append(prompt);
+    // Event Listeners
+    const btnMonthly = shadow.getElementById('btn-monthly');
+    if (btnMonthly) {
+        btnMonthly.onclick = () => {
+            chrome.runtime.sendMessage({ type: 'extpay-open-plan', plan: 'monthly' }).catch(() => { });
+            host.remove();
+        };
+    }
 
-    $('#trimless-upgrade-monthly').on('click', () => {
-        chrome.runtime.sendMessage({ type: 'extpay-open-plan', plan: 'monthly' }).catch(() => {});
-        prompt.remove();
-    });
+    shadow.getElementById('btn-lifetime').onclick = () => {
+        chrome.runtime.sendMessage({ type: 'extpay-open-plan', plan: 'lifetime' }).catch(() => { });
+        host.remove();
+    };
 
-    $('#trimless-upgrade-lifetime').on('click', () => {
-        chrome.runtime.sendMessage({ type: 'extpay-open-plan', plan: 'lifetime' }).catch(() => {});
-        prompt.remove();
-    });
+    shadow.getElementById('btn-close').onclick = () => {
+        host.remove();
+    };
 
-    $('#trimless-close-prompt').on('click', () => {
-        prompt.remove();
-    });
-
-    // Auto-remove after 30 seconds
-    setTimeout(() => prompt.fadeOut(500, () => prompt.remove()), 30000);
+    // Auto-remove after 30s
+    setTimeout(() => {
+        if (host.isConnected) {
+            container.style.opacity = '0';
+            container.style.transform = 'translateX(120%)';
+            container.style.transition = 'all 0.3s ease-in';
+            setTimeout(() => host.remove(), 300);
+        }
+    }, 30000);
 }
 
-const untrimTimer = new (function() {
+// Show upgrade prompt when limit is reached
+function showUpgradePrompt() {
+    createShadowPrompt(
+        'limit-reached',
+        'Daily Limit Reached',
+        "You've untrimmed 5 emails today. Upgrade to Premium for unlimited access!"
+    );
+}
+
+// Check and show trial reminder
+async function checkTrialReminder() {
+    if (!trialStartedAt || isPaid) return;
+
+    const now = new Date();
+    const sixDays = 1000 * 60 * 60 * 24 * 6;
+    const elapsed = now - trialStartedAt;
+
+    // Show only if 6+ days have passed AND trial is not yet expired (7 days)
+    if (elapsed > sixDays && elapsed < (sixDays + (1000 * 60 * 60 * 24 * 2))) { // Allow a 2-day window
+        const local = await chrome.storage.local.get('trimless-reminder-shown');
+        const today = new Date().toDateString();
+
+        if (local['trimless-reminder-shown'] !== today) {
+            createShadowPrompt(
+                'trial-reminder',
+                'Trial Ending Soon',
+                "Your 7-day free trial is ending soon. Upgrade now to keep using Trimless without limits!",
+                false // Hide monthly button to simplify, or keep it. Let's keep it simple as requested "CTA to go Premium"
+            );
+            await chrome.storage.local.set({ 'trimless-reminder-shown': today });
+        }
+    }
+}
+
+const untrimTimer = new (function () {
     this.again = 0;
     this.isTicking = false;
 
-    this.more = function() {
+    this.more = function () {
         if (!isEnabled) {
             ununtrim();
             return;
@@ -206,7 +257,7 @@ const untrimTimer = new (function() {
         }
     }
 
-    this.stuff = function() {
+    this.stuff = function () {
         if (!isEnabled) {
             ununtrim();
             untrimTimer.again = 0;
@@ -240,7 +291,7 @@ async function untrim() {
         return; // Limit reached, prompt already shown
     }
 
-    const ad = function(what) {
+    const ad = function (what) {
         const tmpad = $(this);
         if (!tmpad.text().trim().length) {
             tmpad.hide().removeClass(what).addClass('trimless-' + what);
@@ -248,9 +299,9 @@ async function untrim() {
     };
 
     // "View entire message"
-    $(".iX > a").each(function() {
+    $(".iX > a").each(function () {
         const tmpvem = $(this);
-        $.get(this.href, function(data) {
+        $.get(this.href, function (data) {
             tmpvem.parents().eq(1).html($('font[size=-1]', data).last().html());
         });
     });
@@ -262,12 +313,12 @@ async function untrim() {
         $('.h5').removeClass('h5').addClass('im').addClass('trimless-h5')
     ).addClass('trimless-content');
     $('.ajU, .ajV, .adm').hide().addClass('trimless-button');
-    $('.adL').each(function() { ad.apply(this, ['adL']); });
-    $('.adM').each(function() { ad.apply(this, ['adM']); });
+    $('.adL').each(function () { ad.apply(this, ['adL']); });
+    $('.adM').each(function () { ad.apply(this, ['adM']); });
 
     if (untrimReplies) {
         // Otherwise the main textarea steals the focus
-        $('.ajR[style="user-select: none;"]').on('click', function(e) {
+        $('.ajR[style="user-select: none;"]').on('click', function (e) {
             e.stopPropagation();
         });
         // Harder to undo, since this part isn't read-only
@@ -285,15 +336,15 @@ async function untrim() {
 }
 
 function ununtrim() {
-    const ad = function(what) {
+    const ad = function (what) {
         const tmpad = $(this);
         if (!tmpad.text().trim().length) {
             tmpad.removeClass('trimless-' + what).addClass(what).show();
         }
     }
 
-    $('.trimless-adM').each(function() { ad.apply(this, ['adM']); });
-    $('.trimless-adL').each(function() { ad.apply(this, ['adL']); });
+    $('.trimless-adM').each(function () { ad.apply(this, ['adM']); });
+    $('.trimless-adL').each(function () { ad.apply(this, ['adL']); });
     $('.trimless-button').removeClass('trimless-button').show();
     $('.trimless-content').removeClass('trimless-content');
     $('.trimless-h5').removeClass('trimless-h5')
@@ -339,7 +390,10 @@ function applyOptionsInterface(options) {
 untrimTimer.more();
 $(window).on('hashchange', untrimTimer.more);
 $(document).on('click', untrimOnClick);
-$(window).on('load', untrimTimer.more);
+$(window).on('load', () => {
+    untrimTimer.more();
+    checkTrialReminder();
+});
 $(applyOptions);
 
 $(document).on('visibilitychange', untrimTimer.more);
@@ -372,7 +426,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
 
     if (changes['trimless-enabled']) {
         isEnabled = changes['trimless-enabled'].newValue;
-        chrome.runtime.sendMessage(isEnabled).catch(() => {});
+        chrome.runtime.sendMessage(isEnabled).catch(() => { });
         if (isEnabled) {
             untrimTimer.more();
         } else {
