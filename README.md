@@ -1,6 +1,6 @@
 # Trimless for Gmail V3 - Chrome Extension
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Version](https://img.shields.io/badge/version-1.1.0-blue)
 ![Manifest](https://img.shields.io/badge/manifest-v3-green)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -30,7 +30,7 @@
 
 ### From Chrome Web Store (Recommended)
 
-1. Visit the [Chrome Web Store](https://chromewebstore.google.com/detail/trimless-for-gmail-v3/oibhbmliggcbpecnkjbdolkokcpmobbo)
+1. Visit [Trimless for Gmail V3](https://chromewebstore.google.com/detail/trimless-for-gmail-v3/oibhbmliggcbpecnkjbdolkokcpmobbo) on the Chrome Web Store
 2. Click "Add to Chrome"
 3. Enjoy automatic message expansion!
 
@@ -47,6 +47,9 @@
 Click the extension icon to:
 
 - Toggle features on/off
+
+Right-click the extension icon and choose "Options" to:
+
 - Customize colors and positioning (Premium only)
 - Check trial status and quota usage
 - Upgrade to Premium
@@ -121,8 +124,9 @@ MIT License with ExtensionPay integration.
 
 ## 🆘 Support
 
-- **Email**: support@trimlessforgmail.com
-- **Documentation**: See [the website here](https://trimlessforgmail.com/)!
+- **Email**: <support@trimlessforgmail.com>
+- **Documentation**: See the [Trimless for Gmail V3 website](https://trimlessforgmail.com/)!
+- **Maker**: Visit [Raf Vantongerloo's Portfolio](https://rafvantongerloo.com/)!
 
 ## 🙏 Acknowledgments
 
@@ -134,4 +138,4 @@ MIT License with ExtensionPay integration.
 
 **Made with ❤️ for Gmail power users**
 
-Version 1.0.0 | Manifest V3 | Chrome Extension
+Version 1.1.0 | Manifest V3 | Chrome Extension

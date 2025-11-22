@@ -7,16 +7,35 @@ function save() {
   });
 }
 
+/**
+ * Lightens a hex color by a percentage
+ * @param {string} hex - Hex color (e.g., '#888888')
+ * @param {number} percent - Amount to lighten (0-100)
+ * @returns {string} Lightened hex color
+ */
+function lightenColor(hex, percent) {
+  const num = parseInt(hex.replace('#', ''), 16);
+  const amt = Math.round(2.55 * percent);
+
+  const R = Math.min(255, (num >> 16) + amt);
+  const G = Math.min(255, ((num >> 8) & 0x00FF) + amt);
+  const B = Math.min(255, (num & 0x0000FF) + amt);
+
+  return '#' + (
+    (1 << 24) + (R << 16) + (G << 8) + B
+  ).toString(16).slice(1).toUpperCase();
+}
+
 function updateColorValue() {
   $('#color-value').text(tmpItems['trimless-color-value']);
   $('#color-value').css('color', tmpItems['trimless-color-value']);
 }
 
-function handleColorChange(color) {
-  tmpItems['trimless-color-value'] =
-    color.toHexString().toUpperCase();
-  tmpItems['trimless-color-border'] =
-    color.lighten(27).toHexString().toUpperCase();
+function handleColorChange(e) {
+  const color = e.target.value;
+  tmpItems['trimless-color-value'] = color.toUpperCase();
+  // Lighten the color by 27% for the border (matches original spectrum.js behavior)
+  tmpItems['trimless-color-border'] = lightenColor(color, 27);
   updateColorValue();
 }
 
@@ -36,9 +55,21 @@ async function updatePremiumStatus() {
 
     // Hide all status sections first
     $('#status-paid, #status-trial, #status-free').hide();
+    $('#change-subscription-btn').hide();
 
     if (isPaid) {
-      // User is paid
+      // User is paid - check if they have a subscription
+      try {
+        const user = await chrome.runtime.sendMessage('extpay-get-user');
+        if (user && user.plan && user.plan.interval) {
+          // User has a subscription (monthly, yearly, etc.)
+          $('#change-subscription-btn').show();
+        }
+        // If no plan.interval, it's a lifetime purchase - button stays hidden
+      } catch (err) {
+        console.error('Error fetching ExtPay user data:', err);
+      }
+
       $('#status-paid').show();
     } else if (trialStartedAt) {
       // Check if trial is still active
@@ -74,25 +105,18 @@ function showFreeStatus(dailyUsage) {
 
 function initialize() {
   // Initialize color settings
-  $('#color-enabled').on('change', function() {
+  $('#color-enabled').on('change', function () {
     tmpItems['trimless-color-enabled'] = this.checked;
   });
   $('#color-enabled').prop('checked', tmpItems['trimless-color-enabled']);
 
   updateColorValue();
 
-  $('#color-input').spectrum({
-    color: tmpItems['trimless-color-value'],
-    flat: true,
-    showButtons: false,
-    showInput: true,
-    preferredFormat: 'hex',
-    change: handleColorChange,
-    move: handleColorChange
-  });
+  $('#color-input').val(tmpItems['trimless-color-value']);
+  $('#color-input').on('input change', handleColorChange);
 
   // Initialize indentation settings
-  $('#indentation-enabled').on('change', function() {
+  $('#indentation-enabled').on('change', function () {
     tmpItems['trimless-indentation-enabled'] = this.checked;
   });
   $('#indentation-enabled').prop(
@@ -105,7 +129,7 @@ function initialize() {
   $('#indentation-input').trigger('change');
 
   // Initialize reply settings
-  $('#reply-enabled').on('change', function() {
+  $('#reply-enabled').on('change', function () {
     tmpItems['trimless-reply-enabled'] = this.checked;
   });
   $('#reply-enabled').prop('checked', tmpItems['trimless-reply-enabled']);
@@ -114,11 +138,11 @@ function initialize() {
   $('#save').on('click', save);
 
   // Reset button
-  $('#reset').on('click', function() {
+  $('#reset').on('click', function () {
     $('#color-enabled').prop('checked', true);
     $('#color-enabled').trigger('change');
-    $('#color-input').spectrum('set', '#888888');
-    handleColorChange($('#color-input').spectrum('get'));
+    $('#color-input').val('#888888');
+    handleColorChange({ target: { value: '#888888' } });
 
     $('#indentation-enabled').prop('checked', true);
     $('#indentation-enabled').trigger('change');
@@ -138,6 +162,10 @@ function initialize() {
     chrome.runtime.sendMessage('extpay-open-payment');
   });
 
+  $('#change-subscription-btn').on('click', () => {
+    chrome.runtime.sendMessage('extpay-open-payment');
+  });
+
   // Update premium status
   updatePremiumStatus();
 
@@ -148,7 +176,7 @@ function initialize() {
 document.addEventListener(
   'DOMContentLoaded',
   () => {
-    chrome.storage.sync.get(null, function(items) {
+    chrome.storage.sync.get(null, function (items) {
       tmpItems = items;
       initialize();
     });

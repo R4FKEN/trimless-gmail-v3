@@ -191,14 +191,3 @@ input[type="range"] {
     color: #48bb78;
     font-weight: 500;
 }
-
-/* Spectrum Override */
-.sp-replacer {
-    border: 1px solid var(--border-color) !important;
-    border-radius: var(--radius-md) !important;
-    background: white !important;
-}
-
-.sp-preview {
-    border: none !important;
-}

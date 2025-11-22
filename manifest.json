@@ -1,10 +1,11 @@
 {
   "manifest_version": 3,
   "name": "Trimless for Gmail™ V3",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Automatically show trimmed content in Gmail™.",
   "icons": {
     "16": "images/icon-16.png",
+    "32": "images/icon-32.png",
     "48": "images/icon-48.png",
     "128": "images/icon-128.png"
   },
@@ -20,13 +21,22 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://mail.google.com/mail/*"],
-      "js": ["vendor/jquery-3.7.1.min.js", "contentScript.js"],
+      "matches": [
+        "https://mail.google.com/mail/*"
+      ],
+      "js": [
+        "vendor/jquery-3.7.1.min.js",
+        "contentScript.js"
+      ],
       "run_at": "document_start"
     },
     {
-      "matches": ["https://extensionpay.com/*"],
-      "js": ["vendor/ExtPay.js"],
+      "matches": [
+        "https://extensionpay.com/*"
+      ],
+      "js": [
+        "vendor/ExtPay.js"
+      ],
       "run_at": "document_start"
     }
   ],
@@ -34,7 +44,9 @@
     "page": "options.html",
     "open_in_tab": false
   },
-  "permissions": ["storage"],
+  "permissions": [
+    "storage"
+  ],
   "host_permissions": [
     "https://mail.google.com/mail/*",
     "https://extensionpay.com/*"

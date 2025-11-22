@@ -1,11 +1,18 @@
 // Load configuration
 importScripts('config.js');
 
+// Validate configuration
+if (!CONFIG || !CONFIG.EXTPAY_ID || CONFIG.EXTPAY_ID === 'your-extension-id') {
+    console.error('❌ Trimless: Invalid config.js - ExtPay ID not configured properly');
+    console.error('Please create config.js with a valid EXTPAY_ID from https://extensionpay.com');
+    // Extension will not function without valid config
+    throw new Error('Invalid configuration - ExtPay ID required');
+}
+
 // Load ExtPay library
 importScripts('vendor/ExtPay.js');
 
-// TODO: Replace 'your-extension-id' with your actual ExtensionPay extension ID
-// Sign up at https://extensionpay.com and create your extension to get this ID
+// Initialize ExtPay with validated config
 const extpay = ExtPay(CONFIG.EXTPAY_ID);
 extpay.startBackground();
 
