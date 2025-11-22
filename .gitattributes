@@ -4,6 +4,5 @@ images\promo-marquee.png export-ignore
 images\promo-small.png export-ignore
 images\screenshot.png export-ignore
 preview.html export-ignore
-config.js export-ignore
 build.ps1 export-ignore
 build.sh export-ignore

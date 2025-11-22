@@ -1,4 +1,4 @@
-# Trimless for Gmail V3 - Chrome Extension
+# Trimless for Gmail™ V3 - Expand Clipped Messages - Chrome Extension
 
 ![Version](https://img.shields.io/badge/version-1.1.0-blue)
 ![Manifest](https://img.shields.io/badge/manifest-v3-green)
@@ -30,7 +30,7 @@
 
 ### From Chrome Web Store (Recommended)
 
-1. Visit [Trimless for Gmail V3](https://chromewebstore.google.com/detail/trimless-for-gmail-v3/oibhbmliggcbpecnkjbdolkokcpmobbo) on the Chrome Web Store
+1. Visit [Trimless for Gmail™ V3 - Expand Clipped Messages](https://chromewebstore.google.com/detail/trimless-for-gmail-v3/oibhbmliggcbpecnkjbdolkokcpmobbo) on the Chrome Web Store
 2. Click "Add to Chrome"
 3. Enjoy automatic message expansion!
 
@@ -125,7 +125,7 @@ MIT License with ExtensionPay integration.
 ## 🆘 Support
 
 - **Email**: <support@trimlessforgmail.com>
-- **Documentation**: See the [Trimless for Gmail V3 website](https://trimlessforgmail.com/)!
+- **Documentation**: See the [Trimless for Gmail™ V3 - Expand Clipped Messages website](https://trimlessforgmail.com/)!
 - **Maker**: Visit [Raf Vantongerloo's Portfolio](https://rafvantongerloo.com/)!
 
 ## 🙏 Acknowledgments
