@@ -162,6 +162,10 @@ function initialize() {
     chrome.runtime.sendMessage('extpay-open-payment');
   });
 
+  $('#login-btn').on('click', () => {
+    chrome.runtime.sendMessage('extpay-open-login');
+  });
+
   $('#change-subscription-btn').on('click', () => {
     chrome.runtime.sendMessage('extpay-open-payment');
   });

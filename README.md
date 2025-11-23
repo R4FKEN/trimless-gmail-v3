@@ -89,6 +89,8 @@ This extension uses Chrome's latest Manifest V3 architecture:
 - ✅ **No external servers** - No data leaves your device, except for payment details via ExtPay/Stripe
 - ✅ **Open source ready** - Transparent architecture
 - ✅ **Secure payments** - ExtensionPay/Stripe integration
+- ✅ **Privacy Policy** - [Privacy Policy](https://trimlessforgmail.com/privacy-policy/)
+- ✅ **Terms of Service** - [Terms of Service](https://trimlessforgmail.com/terms-of-service/)
 
 ## 💰 Payment Integration
 

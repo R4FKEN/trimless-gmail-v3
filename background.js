@@ -145,6 +145,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         extpay.openPaymentPage(message.plan);
         return;
     }
+
+    if (message === 'extpay-open-login') {
+        extpay.openLoginPage();
+        return;
+    }
 });
 
 // Sync payment state from ExtPay on startup and periodically
