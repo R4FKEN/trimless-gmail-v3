@@ -1,8 +1,8 @@
 .DS_Store export-ignore
 antigravity.md export-ignore
-images\promo-marquee.png export-ignore
-images\promo-small.png export-ignore
-images\screenshot.png export-ignore
+images/promo-marquee.png export-ignore
+images/promo-small.png export-ignore
+images/screenshot.png export-ignore
 preview.html export-ignore
 build.ps1 export-ignore
 build.sh export-ignore
