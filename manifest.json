@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Trimless for Gmail™ V3 - Expand Clipped Messages",
   "version": "1.1.0",
-  "description": "Never click 'Show trimmed content' again. Automatically expand clipped Gmail messages, trimmed content & long email threads instantly.",
+  "description": "Never click 'Show trimmed content' again. Automatically expand clipped Gmail messages, trimmed content & email threads instantly.",
   "icons": {
     "16": "images/icon-16.png",
     "32": "images/icon-32.png",
