@@ -155,19 +155,19 @@ function initialize() {
 
   // Premium section button handlers
   $('#start-trial-btn').on('click', () => {
-    chrome.runtime.sendMessage('extpay-open-trial');
+    chrome.runtime.sendMessage('extpay-open-trial').catch(() => {});
   });
 
   $('#upgrade-btn, #upgrade-from-trial').on('click', () => {
-    chrome.runtime.sendMessage('extpay-open-payment');
+    chrome.runtime.sendMessage('extpay-open-payment').catch(() => {});
   });
 
   $('#login-btn').on('click', () => {
-    chrome.runtime.sendMessage('extpay-open-login');
+    chrome.runtime.sendMessage('extpay-open-login').catch(() => {});
   });
 
   $('#change-subscription-btn').on('click', () => {
-    chrome.runtime.sendMessage('extpay-open-payment');
+    chrome.runtime.sendMessage('extpay-open-payment').catch(() => {});
   });
 
   // Update premium status

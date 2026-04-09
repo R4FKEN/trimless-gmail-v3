@@ -5,8 +5,7 @@ importScripts('config.js');
 if (!CONFIG || !CONFIG.EXTPAY_ID || CONFIG.EXTPAY_ID === 'your-extension-id') {
     console.error('❌ Trimless: Invalid config.js - ExtPay ID not configured properly');
     console.error('Please create config.js with a valid EXTPAY_ID from https://extensionpay.com');
-    // Extension will not function without valid config
-    throw new Error('Invalid configuration - ExtPay ID required');
+    // Don't throw — keep the service worker alive so storage & settings still work
 }
 
 // Load ExtPay library
