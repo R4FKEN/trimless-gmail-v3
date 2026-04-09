@@ -1,6 +1,6 @@
-# Trimless for Gmail™ V3 - Expand Clipped Messages - Chrome Extension
+# Trimless for Gmail™ V3 - Expand Clipped Messages - Browser Extension
 
-![Version](https://img.shields.io/badge/version-1.1.0-blue)
+![Version](https://img.shields.io/badge/version-1.2.0-blue)
 ![Manifest](https://img.shields.io/badge/manifest-v3-green)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -24,14 +24,14 @@
 
 - 🎁 **7-day unlimited trial** (no credit card required)
 - 🆓 **5 free expansions daily** after trial
-- 💰 **$4.99 one-time** OR **$1.99/month** for unlimited
+- 💰 **$4.99 one-time** for Premium features
 
 ## 📦 Installation
 
-### From Chrome Web Store (Recommended)
+### From Browser Web/Add-on Store (Recommended)
 
-1. Visit [Trimless for Gmail™ V3 - Expand Clipped Messages](https://chromewebstore.google.com/detail/trimless-for-gmail-v3/oibhbmliggcbpecnkjbdolkokcpmobbo) on the Chrome Web Store
-2. Click "Add to Chrome"
+1. Visit [Trimless for Gmail™ V3 - Expand Clipped Messages](https://chromewebstore.google.com/detail/trimless-for-gmail-v3/oibhbmliggcbpecnkjbdolkokcpmobbo) on the Chrome Web Store or the Firefox Add-ons store
+2. Click "Add to Chrome" or "Add to Firefox"
 3. Enjoy automatic message expansion!
 
 ## 🎯 Usage
@@ -71,11 +71,11 @@ Right-click the extension icon and choose "Options" to:
 
 ### Manifest V3 Compliance
 
-This extension uses Chrome's latest Manifest V3 architecture:
+This extension uses the browser's latest Manifest V3 architecture:
 
 - Service Worker background script (no persistent background pages)
 - Content scripts for Gmail integration
-- Chrome Storage Sync API for settings
+- Browser's Storage Sync API for settings
 
 ### Permissions
 
@@ -114,7 +114,7 @@ This extension uses [ExtensionPay](https://extensionpay.com/) and Stripe for sec
 Bug reports and feature suggestions are welcome!
 
 1. Send an email describing the bug or feature
-2. Include Gmail version and Chrome version
+2. Include Gmail version and browser details and version
 3. Provide steps to reproduce (for bugs)
 
 ## 📄 License
@@ -140,4 +140,4 @@ MIT License with ExtensionPay integration.
 
 **Made with ❤️ for Gmail power users**
 
-Version 1.1.0 | Manifest V3 | Chrome Extension
+Version 1.2.0 | Manifest V3 | Browser Extension
