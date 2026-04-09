@@ -1,0 +1,11 @@
+Chrome:
+  "background": {
+    "service_worker": "background.js"
+  },
+  
+  
+  
+Firefox:
+"background": {
+  "scripts": ["background.js"]
+},
