@@ -38,6 +38,7 @@
 
 ### Automatic Expansion
 
+- Login to the Extension
 - Simply open Gmail - clipped messages expand automatically
 - Works on page load and as new messages arrive
 - No configuration needed!

@@ -1,0 +1,76 @@
+{
+  "manifest_version": 3,
+  "name": "Trimless for Gmail™ V3 - Expand Clipped Messages",
+  "version": "1.2.0",
+  "description": "Never click 'Show trimmed content' again. Automatically expand clipped Gmail messages, trimmed content & email threads instantly.",
+  "background": {
+    "scripts": [
+      "shims/storage-session-compat.js",
+      "shims/execute-script-compat.js",
+      "shims/sidepanel-compat.js",
+      "shims/declarative-net-request-stub.js",
+      "shims/user-scripts-compat.js",
+      "shims/tabs-windows-compat.js",
+      "shims/runtime-compat.js",
+      "shims/downloads-compat.js",
+      "shims/privacy-stub.js",
+      "shims/notifications-compat.js",
+      "config.js",
+      "vendor/ExtPay.js",
+      "background.js"
+    ]
+  },
+  "action": {
+    "default_icon": {
+      "38": "images/icon-action-38.png",
+      "19": "images/icon-action-19.png"
+    },
+    "default_title": "Trimless for Gmail™ V3 - Expand Clipped Messages"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://mail.google.com/mail/*",
+    "https://extensionpay.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://mail.google.com/mail/*"
+      ],
+      "js": [
+        "vendor/jquery-3.7.1.min.js",
+        "contentScript.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    },
+    {
+      "matches": [
+        "https://extensionpay.com/*"
+      ],
+      "js": [
+        "vendor/ExtPay.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "trimlessgmailV3@rafvantongerloo.com"
+    }
+  },
+  "icons": {
+    "128": "images/icon-128.png",
+    "48": "images/icon-48.png",
+    "32": "images/icon-32.png",
+    "16": "images/icon-16.png"
+  },
+  "options_ui": {
+    "open_in_tab": false,
+    "page": "options.html"
+  },
+  "short_name": "Trimless Gmail"
+}
